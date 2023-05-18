@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>입력 내용 저장</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
+    <style>
+        div {
+            margin: auto;
+            padding: auto;
+            width: 400px;
+        }
+    </style>
+     <script>
+        $(document).ready(function () {
+            let formValue = JSON.parse(sessionStorage.getItem('formData')) || {};
+            $.each(formValue, function (i, v) {
+                let element = $("[name=" + i + "]");
+                if (element.prop('type') == 'radio') {
+                    $('input[name=' + i + '][value='+v+']').prop("checked", true);
+                } else {
+                    element.val(v);
+                }
+            });
+
+            $('#btn1').click(function () {
+                let formi = $('#formi');
+                let formElements = $('#formi').serializeArray();
+                console.log("==================");
+                console.log(formElements);
+                $.each(formElements, function (i, v) {
+                    formValue[v.name] = v.value;
+                });
+                sessionStorage.setItem('formData', JSON.stringify(formValue));
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <form action="#" id="formi">
+            <label for="item1">상품: </label>
+            <select name="item1" id="item1">
+                <option value="" selected> 선택하세요 </option>
+                <option value="1"> 아이템1 </option>
+                <option value="2"> 아이템2 </option>
+                <option value="3"> 아이템3 </option>
+            </select>
+            <label for="radio1">사이즈: s</label><input id="radio1" type="radio" name="item2" value="s">
+            <label for="radio2">사이즈: m</label><input id="radio2" type="radio" name="item2" value="m">
+            <label for="radio3">사이즈: l</label><input id="radio3" type="radio" name="item2" value="l"><br>
+            <label for="" id="formi">요청사항</label><input type="text" name="msg"><br>
+            <input type="reset" value="초기화">
+            <button id="btn1" type="button">임시저장</button>
+            <!-- button:defult 행동은 submit!! 요청이 되지 않게 하려면 type="button"-->
+            <button>테스트버튼</button>
+        </form>
+
+    </div>
+
+</body>
+
+</html>
